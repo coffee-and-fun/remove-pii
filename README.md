@@ -8,6 +8,20 @@ The `remove-pii` module is a Node.js package designed to help with privacy by re
 - Customizable to suit different use cases.
 - Easy to integrate into Node.js projects.
 
+### PII Removal
+The core functionality of `remove-pii` includes the identification and removal of various types of PII, such as:
+
+- Email Addresses
+- Phone Numbers
+- Social Security Numbers (SSN)
+- Credit Card Numbers
+- Physical Addresses
+- Passport Numbers
+- Driver's License Numbers
+- IP Addresses
+
+
+
 ## Installation
 
 To install the `@coffeeandfun/remove-pii` module, run the following command in your Node.js project:
@@ -16,6 +30,7 @@ To install the `@coffeeandfun/remove-pii` module, run the following command in y
 npm install remove-pii
 ```
  
+
 
 ## Usage
 
@@ -29,6 +44,26 @@ const text = "John's email is john@example.com and his phone number is 123-456-7
 const cleanedText = removePII(text);
 
 console.log(cleanedText); // Output: "John's email is [email removed] and his phone number is [phone removed]."
+
+```
+
+
+## Customization Example
+
+To customize the `remove-pii` module, you can pass an options object. For example, to replace email addresses with a specific placeholder and not remove phone numbers, you would use the module as follows:
+
+```javascript
+const removePII = require('remove-pii');
+
+const options = {
+  email: { remove: true, replacement: "[custom email placeholder]" },
+  phone: { remove: false }
+};
+
+const text = "Contact me at john.doe@example.com or 123-456-7890.";
+const cleanedText = removePII(text, options);
+
+console.log(cleanedText); // Output: "Contact me at [custom email placeholder] or 123-456-7890."
 
 ```
 
