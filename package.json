@@ -1,0 +1,22 @@
+{
+    "name": "@coffeeandfun/remove-pii",
+    "version": "1.0.0",
+    "description": "A Node.js module to remove personally identifiable information (PII) from text.",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+      "test": "jest"
+    },
+    "keywords": [
+      "PII",
+      "privacy",
+      "text-processing",
+      "data-protection"
+    ],
+    "author": "Coffee & Fun LLC",
+    "license": "ISC",
+    "devDependencies": {
+      "jest": "^27.0.0"
+    }
+  }
+  
