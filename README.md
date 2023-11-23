@@ -27,7 +27,7 @@ The core functionality of `remove-pii` includes the identification and removal o
 To install the `@coffeeandfun/remove-pii` module, run the following command in your Node.js project:
 
 ```bash
-npm install remove-pii
+npm install @coffee-and-fun/remove-pii
 ```
  
 
@@ -53,7 +53,7 @@ console.log(cleanedText); // Output: "John's email is [email removed] and his ph
 To customize the `remove-pii` module, you can pass an options object. For example, to replace email addresses with a specific placeholder and not remove phone numbers, you would use the module as follows:
 
 ```javascript
-const removePII = require('remove-pii');
+const removePII = require('@coffee-and-fun/remove-pii');
 
 const options = {
   email: { remove: true, replacement: "[custom email placeholder]" },
