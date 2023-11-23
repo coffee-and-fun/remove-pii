@@ -7,6 +7,14 @@
     "scripts": {
       "test": "jest"
     },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/coffee-and-fun/remove-pii.git"
+    },
+    "bugs": {
+      "url": "https://github.com/coffee-and-fun/remove-pii/issues"
+    },
+    "homepage": "https://github.com/coffee-and-fun/remove-pii#readme",
     "keywords": [
       "PII",
       "privacy",
