@@ -1,4 +1,5 @@
-const removePII = require("../index.js");
+
+import { removePII } from '../index.js';
 
 describe("removePII", () => {
   test("should replace email addresses with a placeholder", () => {
