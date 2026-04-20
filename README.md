@@ -2,25 +2,25 @@
 
 **Protect privacy by removing personally identifiable information (PII) from text!**
 
-@coffeeandfun/remove-pii is a powerful Node.js package designed to help with privacy by automatically detecting and removing personally identifiable information from text. Originally developed for Helperbird.com, this module has evolved into a comprehensive tool for protecting privacy in text processing.
+A Node.js library that automatically detects and removes sensitive information from any string — emails, phone numbers, SSNs, credit cards, addresses, and more. Originally built for [Helperbird](https://helperbird.com) and now used anywhere privacy matters.
 
-Created by **Robert James Gabriel** at **Coffee & Fun LLC** - making the web more accessible and privacy-focused for everyone.
+Created with ❤️ by **Robert James Gabriel** at **Coffee & Fun LLC**.
 
 ---
 
-## 🎯 Why Use This?
+## 🎯 Why use this?
 
-**For Privacy Protection:**
+**For privacy protection**
 - ✅ Automatically removes sensitive information
-- ✅ Prevents accidental data leaks
-- ✅ GDPR and privacy compliance helper
-- ✅ Customizable for different use cases
+- ✅ Prevents accidental data leaks in logs, analytics, and LLM prompts
+- ✅ Helps with GDPR, HIPAA, and general privacy compliance
+- ✅ Fully customizable per use case
 
-**For Developers:**
-- ✅ Easy integration (just 1 line of code!)
-- ✅ Lightweight and fast
-- ✅ Comprehensive PII detection
-- ✅ Detailed analysis and reporting
+**For developers**
+- ✅ Easy integration — one import, one function call
+- ✅ Zero runtime dependencies
+- ✅ Pure ESM with TypeScript declarations
+- ✅ Detailed analysis and reporting when you need it
 
 ---
 
@@ -30,55 +30,107 @@ Created by **Robert James Gabriel** at **Coffee & Fun LLC** - making the web mor
 npm install @coffeeandfun/remove-pii
 ```
 
+Requires **Node.js 16 or newer**. The package is pure ESM and ships with TypeScript types out of the box.
+
 ---
 
-## 🏃‍♂️ Quick Start
+## 🏃‍♂️ Quick start
 
-```javascript
+```js
 import { removePII } from '@coffeeandfun/remove-pii';
 
-const text = "John's email is john@example.com and his phone number is 123-456-7890.";
-const cleanedText = removePII(text);
+const text = "John's email is john@example.com and his phone is 123-456-7890.";
+const cleaned = removePII(text);
 
-console.log(cleanedText);
-// Output: "John's email is [email removed] and his phone number is [phone removed]."
+console.log(cleaned);
+// "John's email is [email removed] and his phone is [phone removed]."
+```
+
+That's it. Three lines.
+
+---
+
+## 🛡️ PII types detected out of the box
+
+| | Type | Example |
+| :-: | --- | --- |
+| 📧 | Email addresses     | `john@example.com`        |
+| 📞 | Phone numbers       | `123-456-7890`, `(555) 123-4567` |
+| 🆔 | Social Security     | `123-45-6789`             |
+| 💳 | Credit cards        | `1234 5678 9012 3456`     |
+| 🏠 | Street addresses    | `123 Main Street`         |
+| 📋 | Passport numbers    | `AB1234567`               |
+| 🚗 | Driver's licenses   | `D123456789`              |
+| 🌐 | IP addresses        | `192.168.1.1`             |
+| 📮 | ZIP codes           | `12345-6789`              |
+| 🏦 | Bank accounts       | `1234567890123456`        |
+| 🔗 | URLs                | `https://example.com`     |
+| 📅 | Dates of birth      | `01/15/1990`              |
+
+> 💡 URLs are detected but **not** removed by default — pass `{ url: { remove: true } }` if you want them gone too.
+
+---
+
+## 📦 What you get back
+
+Every function takes a `text` string and an optional `options` object. The shape of the return value depends on which function you call:
+
+```js
+// Simple replacement
+removePII(text)                   // → string
+
+// Cleaned text + metadata
+removePIIDetailed(text)           // → { cleanedText, removedItems, originalLength, cleanedLength, reductionPercentage }
+
+// Locate without changing
+detectPII(text)                   // → { text, detectedItems, hasPII, totalMatches, types }
+
+// Full analysis + risk scoring
+analyzePII(text)                  // → { original, cleaned, pii, risk }
+
+// Compliance check
+validatePIICompliance(text)       // → { isCompliant, violations, violationCount, riskLevel, riskScore, recommendations }
+
+// Array of strings
+processBatch(texts)               // → BatchResult[]
+```
+
+Here's what a `removePIIDetailed` result actually looks like:
+
+```js
+{
+  cleanedText: 'Email: [email removed]',
+  removedItems: [
+    {
+      type: 'email',
+      count: 1,
+      items: ['john@example.com'],
+      description: 'Email addresses'
+    }
+  ],
+  originalLength: 23,
+  cleanedLength: 20,
+  reductionPercentage: 13
+}
 ```
 
 ---
 
-## 🛡️ PII Types Detected
+## 📚 API reference
 
-- **📧 Email Addresses** - `john@example.com`
-- **📞 Phone Numbers** - `123-456-7890`, `(555) 123-4567`
-- **🆔 Social Security Numbers** - `123-45-6789`
-- **💳 Credit Card Numbers** - `1234 5678 9012 3456`
-- **🏠 Physical Addresses** - `123 Main Street`
-- **📋 Passport Numbers** - `AB1234567`
-- **🚗 Driver's License Numbers** - `D123456789`
-- **🌐 IP Addresses** - `192.168.1.1`
-- **📮 ZIP Codes** - `12345`, `12345-6789`
-- **🏦 Bank Account Numbers** - `1234567890123456`
-- **🔗 URLs** - `https://example.com`
-- **📅 Dates of Birth** - `01/15/1990`
+### `removePII(text, options?)`
+The main function — returns the cleaned string.
 
----
-
-## 📚 API Reference
-
-### `removePII(text, options)`
-Main function that removes PII and returns cleaned text.
-
-```javascript
-const cleanedText = removePII("Email: john@example.com, Phone: 123-456-7890");
-// Returns: "Email: [email removed], Phone: [phone removed]"
+```js
+const cleaned = removePII("Email: john@example.com, Phone: 123-456-7890");
+// "Email: [email removed], Phone: [phone removed]"
 ```
 
-### `removePIIDetailed(text, options)`
-Enhanced version with detailed information about what was removed.
+### `removePIIDetailed(text, options?)`
+Like `removePII` but also tells you **what** was removed.
 
-```javascript
+```js
 const result = removePIIDetailed("Email: john@example.com");
-console.log(result);
 // {
 //   cleanedText: "Email: [email removed]",
 //   removedItems: [{ type: 'email', count: 1, items: ['john@example.com'] }],
@@ -88,12 +140,11 @@ console.log(result);
 // }
 ```
 
-### `detectPII(text, options)`
-Detects PII without removing it - useful for analysis.
+### `detectPII(text, options?)`
+Find PII **without** changing the text. Each detected item includes `positions` (`start` / `end` / `value`) so you can highlight matches in a UI.
 
-```javascript
+```js
 const analysis = detectPII("Email: john@example.com, Phone: 123-456-7890");
-console.log(analysis);
 // {
 //   text: "Email: john@example.com, Phone: 123-456-7890",
 //   hasPII: true,
@@ -103,96 +154,128 @@ console.log(analysis);
 // }
 ```
 
-### `analyzePII(text, options)`
-Comprehensive analysis with statistics and risk assessment.
+### `analyzePII(text, options?)`
+The full picture — detection + removal + risk scoring all at once. Great for dashboards.
 
-```javascript
+```js
 const analysis = analyzePII("Email: john@example.com, SSN: 123-45-6789");
-console.log(analysis);
 // {
 //   original: { text: "...", length: 45, wordCount: 6 },
-//   cleaned: { text: "...", length: 35, wordCount: 6 },
-//   pii: { detected: [...], totalCount: 2, types: ['email', 'ssn'] },
-//   risk: { level: 'medium', score: 13 }
+//   cleaned:  { text: "...", length: 35, wordCount: 6 },
+//   pii:      { detected: [...], totalCount: 2, types: ['email', 'ssn'] },
+//   risk:     { level: 'medium', score: 13 }
 // }
 ```
 
-### `validatePIICompliance(text, options)`
-Check if text is PII-compliant with recommendations.
+### `validatePIICompliance(text, options?)`
+Yes/no compliance check with human-readable recommendations.
 
-```javascript
+```js
 const compliance = validatePIICompliance("Email: john@example.com");
-console.log(compliance);
 // {
 //   isCompliant: false,
 //   violations: [{ type: 'email', count: 1 }],
 //   riskLevel: 'low',
-//   recommendations: ['📧 Email detected - Consider using hashed emails']
+//   recommendations: ['📧 Email detected - Consider using hashed or masked emails']
 // }
 ```
+
+### `processBatch(texts, options?)`
+Runs `removePIIDetailed` over an array. One bad input won't abort the batch — errors come back as `{ success: false, error }`.
+
+### `getAvailableTypes()`
+Lists every built-in PII type with its description and default replacement.
+
+### `createCustomPattern(type, pattern, replacement, description)`
+Helper for building a custom-pattern options entry (see [Custom patterns](#-custom-patterns) below).
 
 ---
 
 ## 🎨 Customization
 
-### Basic Configuration
-```javascript
+### Basic configuration
+
+Pass an `options` object to enable/disable types and customize replacements. Anything you don't mention keeps its default.
+
+```js
 const options = {
   email: { remove: true, replacement: "[EMAIL HIDDEN]" },
   phone: { remove: false },
-  ssn: { remove: true, replacement: "[SSN REDACTED]" }
+  ssn:   { remove: true, replacement: "[SSN REDACTED]" }
 };
 
 const cleaned = removePII(text, options);
 ```
 
-### Privacy Levels
+### Privacy levels
 
-#### High Privacy Mode
-```javascript
+#### 🔒 High privacy — lock it all down
+
+```js
 const highPrivacy = {
-  email: { remove: true },
-  phone: { remove: true },
-  ssn: { remove: true },
-  creditCard: { remove: true },
-  address: { remove: true },
-  passport: { remove: true },
+  email:          { remove: true },
+  phone:          { remove: true },
+  ssn:            { remove: true },
+  creditCard:     { remove: true },
+  address:        { remove: true },
+  passport:       { remove: true },
   driversLicense: { remove: true },
-  ipAddress: { remove: true },
-  zipCode: { remove: true },
-  bankAccount: { remove: true },
-  url: { remove: true },
-  dateOfBirth: { remove: true }
+  ipAddress:      { remove: true },
+  zipCode:        { remove: true },
+  bankAccount:    { remove: true },
+  url:            { remove: true },
+  dateOfBirth:    { remove: true }
 };
 ```
 
-#### Moderate Privacy Mode
-```javascript
+#### 🛡️ Moderate privacy — financials only
+
+```js
 const moderatePrivacy = {
-  ssn: { remove: true },
-  creditCard: { remove: true },
+  ssn:         { remove: true },
+  creditCard:  { remove: true },
   bankAccount: { remove: true },
-  email: { remove: false },
-  phone: { remove: false },
-  address: { remove: true }
+  address:     { remove: true },
+  email:       { remove: false },
+  phone:       { remove: false }
 };
 ```
 
-#### Custom Replacements
-```javascript
+#### 🎨 Custom replacements
+
+```js
 const customReplacements = {
-  email: { replacement: "📧 [CONTACT INFO]" },
-  phone: { replacement: "📞 [PHONE NUMBER]" },
+  email:   { replacement: "📧 [CONTACT INFO]" },
+  phone:   { replacement: "📞 [PHONE NUMBER]" },
   address: { replacement: "🏠 [LOCATION]" }
 };
 ```
 
+### 🧩 Custom patterns
+
+Need to redact something the library doesn't know about? Drop in your own regex:
+
+```js
+import { removePII, createCustomPattern } from '@coffeeandfun/remove-pii';
+
+const options = createCustomPattern(
+  'employeeId',
+  /\bEMP-\d{6}\b/g,
+  '[employee id removed]',
+  'Internal employee IDs'
+);
+
+removePII('Ticket raised by EMP-123456', options);
+// 'Ticket raised by [employee id removed]'
+```
+
 ---
 
-## 🔧 Advanced Features
+## 🔧 Advanced features
 
-### Batch Processing
-```javascript
+### 📚 Batch processing
+
+```js
 import { processBatch } from '@coffeeandfun/remove-pii';
 
 const texts = [
@@ -202,76 +285,87 @@ const texts = [
 ];
 
 const results = processBatch(texts);
-console.log(results);
-// Array of results with success/failure status
+// [{ index: 0, success: true, cleanedText: ..., removedItems: [...] }, ...]
 ```
 
-### Risk Assessment
-```javascript
+### ⚖️ Risk assessment
+
+```js
 const compliance = validatePIICompliance(text);
-console.log(`Risk Level: ${compliance.riskLevel}`);
-console.log(`Risk Score: ${compliance.riskScore}`);
-console.log(`Recommendations: ${compliance.recommendations.join(', ')}`);
+
+console.log(`Risk Level: ${compliance.riskLevel}`);      // 'low' | 'medium' | 'high' | 'critical'
+console.log(`Risk Score: ${compliance.riskScore}`);      // weighted numeric score
+console.log(`Recommendations:`, compliance.recommendations);
 ```
 
-### Available PII Types
-```javascript
+### 📖 Inspect available types
+
+```js
 import { getAvailableTypes } from '@coffeeandfun/remove-pii';
 
-const types = getAvailableTypes();
-types.forEach(type => {
-  console.log(`${type.type}: ${type.description}`);
+getAvailableTypes().forEach(t => {
+  console.log(`${t.type}: ${t.description}`);
 });
 ```
 
 ---
 
-## 🎭 Real-World Examples
+## 🎭 Real-world examples
 
-### Data Cleaning Pipeline
-```javascript
-import { removePII, validatePIICompliance } from '@coffeeandfun/remove-pii';
+### 🧽 Log sanitization
 
-function cleanUserData(userData) {
-  const compliance = validatePIICompliance(userData);
-  
-  if (!compliance.isCompliant) {
-    console.log(`⚠️ PII detected: ${compliance.violationCount} violations`);
-    return removePII(userData);
-  }
-  
-  return userData;
-}
-```
-
-### Log Sanitization
-```javascript
+```js
 import { removePIIDetailed } from '@coffeeandfun/remove-pii';
 
-function sanitizeLogs(logEntry) {
-  const result = removePIIDetailed(logEntry);
-  
-  if (result.removedItems.length > 0) {
-    console.log(`🔒 Sanitized log: removed ${result.removedItems.length} PII items`);
+export function sanitize(entry) {
+  const { cleanedText, removedItems } = removePIIDetailed(entry);
+  if (removedItems.length > 0) {
+    console.debug(`🔒 Sanitized ${removedItems.length} PII item(s)`);
   }
-  
-  return result.cleanedText;
+  return cleanedText;
 }
 ```
 
-### API Response Cleaning
-```javascript
+### 🌐 Express middleware
+
+```js
+import express from 'express';
+import { removePII } from '@coffeeandfun/remove-pii';
+
+const app = express();
+app.use(express.json());
+
+app.post('/logs', (req, res) => {
+  console.log(removePII(req.body.message));
+  res.sendStatus(204);
+});
+```
+
+### 🔄 API response scrubbing
+
+```js
 import { analyzePII } from '@coffeeandfun/remove-pii';
 
-function sanitizeApiResponse(response) {
-  const analysis = analyzePII(JSON.stringify(response));
-  
-  if (analysis.pii.totalCount > 0) {
-    console.log(`⚠️ API response contains PII: ${analysis.pii.types.join(', ')}`);
-    return JSON.parse(analysis.cleaned.text);
+export function scrubResponse(body) {
+  const result = analyzePII(JSON.stringify(body));
+  return result.pii.totalCount > 0
+    ? JSON.parse(result.cleaned.text)
+    : body;
+}
+```
+
+### 🧼 Data-cleaning pipeline
+
+```js
+import { removePII, validatePIICompliance } from '@coffeeandfun/remove-pii';
+
+function cleanUserData(input) {
+  const compliance = validatePIICompliance(input);
+  if (!compliance.isCompliant) {
+    console.warn(`⚠️ PII detected: ${compliance.violationCount} violations`);
+    return removePII(input);
   }
-  
-  return response;
+  return input;
 }
 ```
 
@@ -283,8 +377,8 @@ function sanitizeApiResponse(response) {
 npm test
 ```
 
-We've included comprehensive tests covering:
-- ✅ All PII types and patterns
+The suite covers:
+- ✅ Every built-in PII type and pattern
 - ✅ Edge cases and error handling
 - ✅ Performance and consistency
 - ✅ Batch processing
@@ -296,13 +390,14 @@ We've included comprehensive tests covering:
 
 We welcome contributions!
 
-1. **🐛 Report Issues** - Found a bug or missing PII type?
-2. **💡 Suggest Features** - Ideas for better privacy protection?
-3. **🔧 Submit PRs** - Code improvements welcome!
+1. 🐛 **Report issues** — found a bug or a missing PII type?
+2. 💡 **Suggest features** — ideas for better privacy protection?
+3. 🔧 **Submit PRs** — code improvements welcome!
 
-### Development Setup
+### Dev setup
+
 ```bash
-git clone https://github.com/RobertJGabriel/remove-pii
+git clone https://github.com/coffee-and-fun/remove-pii
 cd remove-pii
 npm install
 npm test
@@ -312,18 +407,17 @@ npm test
 
 ## 📄 License
 
-MIT License - feel free to use in your projects!
+[MIT](./LICENSE) — feel free to use this in your projects.
 
 ---
 
 ## 🙏 Credits
 
 **Created with ❤️ by:**
-- **Robert James Gabriel** - Lead Developer
-
+- **Robert James Gabriel** — Lead Developer
 
 **Originally developed for:**
-- **Helperbird** - An accessibility extension making the web accessible for everyone
+- **[Helperbird](https://helperbird.com)** — an accessibility extension making the web more inclusive for everyone
 
 ---
 
@@ -331,7 +425,8 @@ MIT License - feel free to use in your projects!
 
 Need help protecting privacy in your applications?
 
-- 🐛 **Bug Reports**: [GitHub Issues](https://github.com/RobertJGabriel/remove-pii/issues)
-- 💡 **Feature Requests**: [GitHub Discussions](https://github.com/RobertJGabriel/remove-pii/discussions)
+- 🐛 **Bug reports:** [GitHub Issues](https://github.com/coffee-and-fun/remove-pii/issues)
+- 💡 **Feature requests:** [GitHub Discussions](https://github.com/coffee-and-fun/remove-pii/discussions)
+- 🔐 **Security issues:** see [SECURITY.md](./SECURITY.md)
 
 **Stay privacy-focused! 🔒**

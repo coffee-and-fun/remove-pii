@@ -1,31 +1,51 @@
 {
-    "name": "@coffeeandfun/remove-pii",
-    "version": "2.0.0",
-    "description": "A Node.js module to remove personally identifiable information (PII) from text.",
-    "main": "index.js",
-    "type": "module",
+  "name": "@coffeeandfun/remove-pii",
+  "version": "3.0.0",
+  "description": "A Node.js module to remove personally identifiable information (PII) from text.",
+  "type": "module",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "default": "./index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "src/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=16"
+  },
   "scripts": {
     "format": "npx prettier . --write",
-    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 jest"
+    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 jest",
+    "prepublishOnly": "npm test"
   },
-    "repository": {
-      "type": "git",
-      "url": "git+https://github.com/coffee-and-fun/remove-pii.git"
-    },
-    "bugs": {
-      "url": "https://github.com/coffee-and-fun/remove-pii/issues"
-    },
-    "homepage": "https://github.com/coffee-and-fun/remove-pii#readme",
-    "keywords": [
-      "PII",
-      "privacy",
-      "text-processing",
-      "data-protection"
-    ],
-    "author": "Coffee & Fun LLC",
-    "license": "ISC",
-    "devDependencies": {
-      "jest": "^27.0.0"
-    }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coffee-and-fun/remove-pii.git"
+  },
+  "bugs": {
+    "url": "https://github.com/coffee-and-fun/remove-pii/issues"
+  },
+  "homepage": "https://github.com/coffee-and-fun/remove-pii#readme",
+  "keywords": [
+    "PII",
+    "privacy",
+    "text-processing",
+    "data-protection"
+  ],
+  "author": "Coffee & Fun LLC",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
-  
+}
