@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.1](https://github.com/coffee-and-fun/remove-pii/compare/v3.0.0...v3.0.1) (2026-04-20)
+
+
+### Bug Fixes
+
+* 3.0.0 ([ac7bba9](https://github.com/coffee-and-fun/remove-pii/commit/ac7bba995ba79449feeb8ee70d0c88ab0926d198))
+* 3.0.1 ([3a05197](https://github.com/coffee-and-fun/remove-pii/commit/3a051972ed4af32c737d782f5990ffe000726cf6))
+
 ## [Unreleased]
 
 ### Changed
