@@ -9,7 +9,7 @@ import {
   createCustomPattern
 } from '../index.js';
 
-describe('Remove PII v2.0 - Core Functions', () => {
+describe('Remove PII v3.0 - Core Functions', () => {
   
   describe('removePII (main function)', () => {
     test('should replace email addresses with a placeholder', () => {
