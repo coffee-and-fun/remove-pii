@@ -46,6 +46,6 @@
   "author": "Coffee & Fun LLC",
   "license": "MIT",
   "devDependencies": {
-    "jest": "^29.7.0"
+    "jest": "^30.3.0"
   }
 }
