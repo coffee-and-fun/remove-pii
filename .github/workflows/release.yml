@@ -40,7 +40,7 @@ jobs:
         node-version: [16.x, 18.x, 20.x, 22.x]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
@@ -74,7 +74,7 @@ jobs:
           fi
 
       - name: Checkout tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ steps.resolve.outputs.tag || github.ref }}
 
@@ -101,7 +101,7 @@ jobs:
       id-token: write
     steps:
       - name: Checkout tag
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           ref: ${{ needs.release-please.outputs.tag_name || format('v{0}', github.event.inputs.version) }}
 
